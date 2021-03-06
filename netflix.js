@@ -3,7 +3,6 @@ $(document).ready(function(){
 	d3.csv("netflix_titles_mod.csv", function(error,data){
 		if (error)  throw error;
 
-		var year1 = 1970, year2 = 2016;
 		var global_country = "global";
 
 		netflix_map(data);
@@ -370,22 +369,22 @@ $(document).ready(function(){
 	  			data.forEach(function(d) {
 	  				if(d.country_txt == global_country){
 	  					temp_dict = {}
-	  					temp_dict["release_year"] = +d.release_year;
+	  					temp_dict["rating"] = d.rating;
 	  					temp_dict["count"] = +d.count;
 	  					barchart_array.push(temp_dict);
 	  				}
 	  				else{
 	  					temp_dict = {}
-	  					temp_dict["release_year"] = +d.release_year;
+	  					temp_dict["rating"] = d.rating;
 	  					temp_dict["count"] = +d.count;
 	  					barchart_array.push(temp_dict);
 	  				}
 	  			});
 
-	      		var groups = _(barchart_array).groupBy('release_year');
+	      		var groups = _(barchart_array).groupBy('rating');
 
 	      		var barchart_array = _(groups).map(function(g, key) {
-	      			return { release_year: key, 
+	      			return { rating: key, 
 	      				count: _(g).reduce(function(m,x) { return m + x.count; }, 0) };
 	      			});
 
@@ -398,7 +397,7 @@ $(document).ready(function(){
 		      	y = d3.scaleLinear().range([bc_height, 15]);
 
 	      		// make new chart
-	        	x.domain(barchart_array.map(function(d){ return d.release_year; })); 
+	        	x.domain(barchart_array.map(function(d){ return d.rating; })); 
 	        	y.domain(d3.extent(barchart_array, function(d){ return d.count; })).nice();
 
 	        	bar_chart.selectAll(".axis.axis--x").remove();
@@ -422,7 +421,7 @@ $(document).ready(function(){
 		        // text label for the selected barchart text 2
 		        bar_chart.append("g")
 		        .attr("class", "infowin")
-		        .attr("transform", "translate(180, 5)")
+		        .attr("transform", "translate(250, 5)")
 		        .append("text")
 		        .attr("id","text_2");
 
@@ -442,13 +441,13 @@ $(document).ready(function(){
 	            .data(barchart_array)
 	            .enter().append("rect")
 	            .attr("class", "bar")
-	            .attr("x", function(d) { return x(d.release_year); })
+	            .attr("x", function(d) { return x(d.rating); })
 	            .attr("y", bc_height)  
 	        	.attr("width", x.bandwidth()) 
 	        	.attr("height", 0)
 	        	.on("mouseover", function(d){
 	        		d3.select("#text_1")
-	        		.html("Year :  " + d.release_year );
+	        		.html("Rating :  " + d.rating);
 	        		d3.select("#text_2")
 	        		.html("No. of movies : " + d.count);
 	        	})
