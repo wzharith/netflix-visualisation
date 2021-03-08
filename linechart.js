@@ -58,6 +58,7 @@ d3.csv("group.csv", function(error, data) {
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      
 
   // Add the clip path.
   svg.append("clipPath")
@@ -78,7 +79,8 @@ d3.csv("group.csv", function(error, data) {
       .attr("transform", "translate(" + width + ",0)")
       .call(yAxis);
 
-
+  var tooltip = d3.select("#linechart").append("div")
+	    	.attr("id","tooltip").style("font-size","20px");    
   var colors = d3.scaleOrdinal(d3.schemeCategory10);
   svg.selectAll('.line')
     .data([values, msft])
@@ -92,6 +94,38 @@ d3.csv("group.csv", function(error, data) {
         .attr('d', function(d) {
           return line(d);
         })
+        .on("mousemove", function(d,i){
+          console.log(d[i].type)
+          d3.select(this).style("stroke-width", 4);
+          tooltip.style("visibility", "visible")
+          .html(`<b>${d[i].type}</b>`)
+          .style("top", (d3.event.pageY-60)+"px")
+          .style("left",d3.event.pageX+10+"px");
+        })
+        .on("mouseout", function (d) { 
+          d3.select(this).style("stroke-width", 2);
+          d3.selectAll("#tooltip").style("visibility", "hidden");
+        })
+
+  // var legend = svg.selectAll('g')
+  //               .data([values, msft])
+  //               .enter()
+  //               .append('g')
+  //               .attr('class', 'legend');
+    
+  // legend.append('rect')
+  //     .attr('x', width - 20)
+  //     .attr('y', function(d, i){ return i *  20;})
+  //     .attr('width', 10)
+  //     .attr('height', 10)
+  //     .style('fill', function(d) { 
+  //       return color(d.type);
+  //     });
+      
+  // legend.append('text')
+  //     .attr('x', width - 8)
+  //     .attr('y', function(d, i){ return (i *  20) + 9;})
+  //     .text(function(d){ return d.type; });
         
   /* Add 'curtain' rectangle to hide entire graph */
   var curtain = svg.append('rect')
