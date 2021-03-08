@@ -11,6 +11,7 @@
 <script src="dependencies/jquery-ui.js"></script>
 <script src="netflix.js"></script>
 <script src="bubblechart.js"></script>
+<script src="linechart.js"></script>
 
 
 <style type="text/css">
@@ -145,6 +146,43 @@
 		margin: 0 auto;
 	}
 
+	/* Amount of Movies and TV Shows by Directors */
+	path.line {
+		fill: none;
+		stroke: #666;
+		stroke-width: 2px;
+	}
+	
+	path.area {
+		fill: #e7e7e7;
+	}
+	
+	.axis {
+		shape-rendering: crispEdges;
+	}
+	
+	.x.axis line {
+		stroke: #fff;
+	}
+	
+	.x.axis .minor {
+		stroke-opacity: .7;
+	}
+	
+	.x.axis path {
+		display: none;
+	}
+	
+	.y.axis line, .y.axis path {
+		fill: none;
+		stroke: #000;
+	}
+	.guideline {
+		margin-right: 100px;
+		float: right;
+	}
+	/* Amount of Movies and TV Shows by Directors ended */
+
 
 
 	body{
@@ -232,6 +270,8 @@
 			<div id="waynebubble" style="width:100%; height:90%"></div>
 		</div>
 	</div>
+	<div class="chart_title"><span class="chart_title_text"><center>Amount of Movies by Directors</center></span></div>
+	<center><svg id="linechart"></svg></center>
 </body>
 
 
