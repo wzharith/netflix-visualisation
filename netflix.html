@@ -13,6 +13,7 @@
 <script src="piechart.js"></script>
 <script src="bubblechart.js"></script>
 <script src="linechart.js"></script>
+<script src="total_shows.js"></script>
 
 
 <style type="text/css">
@@ -230,6 +231,20 @@
 		stroke-width: 2px;
 		fill: none;
 	}
+
+	button {
+		font-family: 'Candara', sans-serif;
+		padding: 0.3rem 1rem;
+		margin: 0 auto 0.5rem auto;
+		background-color: firebrick;
+		color: white;
+		opacity: 0.8;
+		border: 1px solid firebrick;
+		border-radius: 25px;
+		align-items: center;
+		justify-content: center;
+		/* display: flex; */
+	}
 }
 
 </style>
@@ -258,25 +273,17 @@
 		</div>
 		<div class="charts" style="width:33%; height:100%">
 			<div class="chart_title" style="height:10%"><span class="chart_title_text">Total Shows by Duration</span></div>
-			<div id="total_tv_shows" style="width:100%; height:90%"></div>
+			<div id="total_tv_shows" style="width:100%; height:88%">
+				<button id="tvshows" onclick="update(tvshows)">TV Shows</button>
+				<button id="movies" onclick="update(movies)">Movies</button>
+			</div>
 		</div>
-	</div>
-
-	<div style="display:flex;width:95%;height:500px;margin:0 auto;margin-bottom: 30px;">
-        <div class="charts" style="width:100%; height:100%">
-            <div class="chart_title" style="height:10%"><span class="chart_title_text">Top 20 Producing Countries</span></div>
-            <div id="top_20_countries" style="width:100%; height:90%"></div>
-		</div>
-        <div class="charts" style="width:100%; height:100%">
-            <div class="chart_title" style="height:10%"><span class="chart_title_text">Distribution of Video Rating</span></div>
-			<div id="distribution_of_video" style="width:100%; height:90%"></div>
-        </div>
 	</div>
 
 	<div style="display:flex;width:95%;height:500px;margin:0 auto;margin-bottom: 30px;">
         <div class="charts" style="width:100%; height:100%">
 			<div class="chart_title"><span class="chart_title_text"><center>Amount of Movies by Directors</center></span></div>
-			<div id="waynebubble" style="width:100%; height:90%"></div>
+			<div id="waynebubble" style="width:100%; height:90%;"></div>
 		</div>
 	</div>
 	<div class="chart_title"><span class="chart_title_text"><center>Amount of Movies by Directors</center></span></div>
