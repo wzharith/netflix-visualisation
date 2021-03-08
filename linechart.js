@@ -31,7 +31,7 @@ d3.csv("group.csv", function(error, data) {
       d = type(d);
   });
 
-  console.log(data);
+//   console.log(data);
 //   console.log(parse(data.date));
 
   // Filter to one symbol; the S&P 500.
@@ -48,9 +48,9 @@ d3.csv("group.csv", function(error, data) {
   y.domain([0, d3.max(msft, function(d) { return d.title; })]).nice();
 
 //   console.log(d3.max(values, function(d) { return d.title; }));
-  console.log(values[0].date);
-  console.log(x.domain());
-  console.log(y.domain());
+//   console.log(values[0].date);
+//   console.log(x.domain());
+//   console.log(y.domain());
 
   // Add an SVG element with the desired dimensions and margin.
   var svg = d3.select("#linechart")
@@ -79,7 +79,7 @@ d3.csv("group.csv", function(error, data) {
       .attr("transform", "translate(" + width + ",0)")
       .call(yAxis);
 
-  var tooltip = d3.select("#linechart").append("div")
+  var tooltip = d3.select("body").append("div")
 	    	.attr("id","tooltip").style("font-size","20px");    
   var colors = d3.scaleOrdinal(d3.schemeCategory10);
   svg.selectAll('.line')
@@ -95,7 +95,7 @@ d3.csv("group.csv", function(error, data) {
           return line(d);
         })
         .on("mousemove", function(d,i){
-          console.log(d[i].type)
+//           console.log(d[i])
           d3.select(this).style("stroke-width", 4);
           tooltip.style("visibility", "visible")
           .html(`<b>${d[i].type}</b>`)
@@ -168,8 +168,11 @@ d3.csv("group.csv", function(error, data) {
     guideline.attr('stroke-width', this.checked ? 1 : 0);
     curtain.attr("opacity", this.checked ? 0.75 : 1);
   })
+  
 
 });
+
+
 
 // Parse dates and numbers. We assume values are sorted by date.
 function type(d) {
