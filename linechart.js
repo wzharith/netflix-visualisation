@@ -79,7 +79,7 @@ d3.csv("group.csv", function(error, data) {
       .attr("transform", "translate(" + width + ",0)")
       .call(yAxis);
 
-  var tooltip = d3.select("#linechart").append("div")
+  var tooltip = d3.select("body").append("div")
 	    	.attr("id","tooltip").style("font-size","20px");    
   var colors = d3.scaleOrdinal(d3.schemeCategory10);
   svg.selectAll('.line')
@@ -95,10 +95,10 @@ d3.csv("group.csv", function(error, data) {
           return line(d);
         })
         .on("mousemove", function(d,i){
-          console.log(d[i].type)
+          console.log(d[i])
           d3.select(this).style("stroke-width", 4);
           tooltip.style("visibility", "visible")
-          .html(`<b>${d[i].type}</b>`)
+          .html(`<b>${d[i].type}</b><br>${d[i].title}`)
           .style("top", (d3.event.pageY-60)+"px")
           .style("left",d3.event.pageX+10+"px");
         })
