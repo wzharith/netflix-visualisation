@@ -10,6 +10,7 @@
 <script src="dependencies/d3-scale-chromatic.v1.min.js"></script>
 <script src="dependencies/jquery-ui.js"></script>
 <script src="netflix.js"></script>
+<script src="piechart.js"></script>
 <script src="bubblechart.js"></script>
 <script src="linechart.js"></script>
 
@@ -68,6 +69,7 @@
 		fill: none;
 		pointer-events: all;
 	}
+
 	#jason path{
 	 	cursor: pointer;
 	}
@@ -183,8 +185,6 @@
 	}
 	/* Amount of Movies and TV Shows by Directors ended */
 
-
-
 	body{
 		margin: 0 auto;
 		font-family:monospace;
@@ -200,12 +200,12 @@
 		font-size:20px;
 		font-weight:bold;
 		border-radius: 3px;
-		/*text-align: center;*/
+		text-align: center;
 		background-color: #FFFFFF;
 		color: black;
-		margin: 0 auto;
-		padding-left:70px;
-		max-height: 50px;
+		margin: auto;
+		/* padding-left:70px; */
+		max-height: 50px;		
 	}
 
 	.chart_title_text{
@@ -223,6 +223,15 @@
 		font-family: 'Candara', sans-serif;
 		font-weight: bold;
 	}
+
+	polyline{
+		opacity: .3;
+		stroke: black;
+		stroke-width: 2px;
+		fill: none;
+	}
+}
+
 </style>
 <body>
 	<div id="dashboard_title"><span id="dashboard_title_text"><center>NETFLIX OVERALL ANALYSIS</center></span></div>
@@ -239,16 +248,16 @@
 	</div>
 	
 	<div style="display:flex;width:94%; height:500px;margin:0 auto;margin-bottom: 30px;">
-		<div class="charts" style="width:30%;height:100%">
+		<div class="charts" style="width:33%;height:100%">
 			<div class="chart_title" style="height:10%"><span class="chart_title_text">Distribution of Shows</span></div>
 			<div id="distribution_of_shows" style="width:100%; height:90%"></div>
 		</div>
-		<div class="charts" style="width:30%; height:100%">
+		<div class="charts" style="width:33%; height:100%">
 			<div class="chart_title" style="height:10%"><span class="chart_title_text">Number of Movie Releases by Rating</span></div>
 			<div id="barchart" style="width:100%; height:90%"></div>
 		</div>
-		<div class="charts" style="width:30%; height:100%">
-			<div class="chart_title" style="height:10%"><span class="chart_title_text">Total TV Shows in Netflix by Year</span></div>
+		<div class="charts" style="width:33%; height:100%">
+			<div class="chart_title" style="height:10%"><span class="chart_title_text">Total Shows by Duration</span></div>
 			<div id="total_tv_shows" style="width:100%; height:90%"></div>
 		</div>
 	</div>
