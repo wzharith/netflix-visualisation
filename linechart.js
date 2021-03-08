@@ -98,7 +98,7 @@ d3.csv("group.csv", function(error, data) {
           console.log(d[i])
           d3.select(this).style("stroke-width", 4);
           tooltip.style("visibility", "visible")
-          .html(`<b>${d[i].type}</b><br>${d[i].title}`)
+          .html(`<b>${d[i].type}</b>`)
           .style("top", (d3.event.pageY-60)+"px")
           .style("left",d3.event.pageX+10+"px");
         })
@@ -168,8 +168,11 @@ d3.csv("group.csv", function(error, data) {
     guideline.attr('stroke-width', this.checked ? 1 : 0);
     curtain.attr("opacity", this.checked ? 0.75 : 1);
   })
+  
 
 });
+
+
 
 // Parse dates and numbers. We assume values are sorted by date.
 function type(d) {

@@ -8,7 +8,7 @@ $(document).ready(function(){
 
         // console.log(data.director);
 
-		var waynebubble = bubblechart(data);
+		var bubblechart = bubblechart(data);
 
 
 	    function bubblechart(data){
@@ -39,15 +39,15 @@ $(document).ready(function(){
 
 	    		return a;
 	    	}
-	    	var tooltip = d3.select("#waynebubble").append("div")
+	    	var tooltip = d3.select("#bubblechart").append("div")
 	    	.attr("id","tooltip").style("font-size","20px");
-	    	var svg = d3.select("#waynebubble")
+	    	var svg = d3.select("#bubblechart")
 	    	.append("svg")
 	    	.attr("width", "100%")
 	    	.attr("height", "100%")
 	    	.attr("class", "bubble");  
 
-	    	var height = $("#waynebubble").height() , width = $("#waynebubble").width();
+	    	var height = $("#bubblechart").height() , width = $("#bubblechart").width();
 
 	    	var color = d3.scaleOrdinal(d3.schemeCategory20c);  
 
