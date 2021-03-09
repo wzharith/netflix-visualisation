@@ -31,7 +31,7 @@ d3.csv("group.csv", function(error, data) {
       d = type(d);
   });
 
-  console.log(data);
+//   console.log(data);
 //   console.log(parse(data.date));
 
   // Filter to one symbol; the S&P 500.
@@ -48,9 +48,9 @@ d3.csv("group.csv", function(error, data) {
   y.domain([0, d3.max(msft, function(d) { return d.title; })]).nice();
 
 //   console.log(d3.max(values, function(d) { return d.title; }));
-  console.log(values[0].date);
-  console.log(x.domain());
-  console.log(y.domain());
+//   console.log(values[0].date);
+//   console.log(x.domain());
+//   console.log(y.domain());
 
   // Add an SVG element with the desired dimensions and margin.
   var svg = d3.select("#linechart")
@@ -58,6 +58,7 @@ d3.csv("group.csv", function(error, data) {
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      
 
   // Add the clip path.
   svg.append("clipPath")
@@ -78,7 +79,8 @@ d3.csv("group.csv", function(error, data) {
       .attr("transform", "translate(" + width + ",0)")
       .call(yAxis);
 
-
+  var tooltip = d3.select("body").append("div")
+	    	.attr("id","tooltip").style("font-size","20px");    
   var colors = d3.scaleOrdinal(d3.schemeCategory10);
   svg.selectAll('.line')
     .data([values, msft])
@@ -92,6 +94,38 @@ d3.csv("group.csv", function(error, data) {
         .attr('d', function(d) {
           return line(d);
         })
+        .on("mousemove", function(d,i){
+//           console.log(d[i])
+          d3.select(this).style("stroke-width", 4);
+          tooltip.style("visibility", "visible")
+          .html(`<b>${d[i].type}</b>`)
+          .style("top", (d3.event.pageY-60)+"px")
+          .style("left",d3.event.pageX+10+"px");
+        })
+        .on("mouseout", function (d) { 
+          d3.select(this).style("stroke-width", 2);
+          d3.selectAll("#tooltip").style("visibility", "hidden");
+        })
+
+  // var legend = svg.selectAll('g')
+  //               .data([values, msft])
+  //               .enter()
+  //               .append('g')
+  //               .attr('class', 'legend');
+    
+  // legend.append('rect')
+  //     .attr('x', width - 20)
+  //     .attr('y', function(d, i){ return i *  20;})
+  //     .attr('width', 10)
+  //     .attr('height', 10)
+  //     .style('fill', function(d) { 
+  //       return color(d.type);
+  //     });
+      
+  // legend.append('text')
+  //     .attr('x', width - 8)
+  //     .attr('y', function(d, i){ return (i *  20) + 9;})
+  //     .text(function(d){ return d.type; });
         
   /* Add 'curtain' rectangle to hide entire graph */
   var curtain = svg.append('rect')
@@ -134,8 +168,11 @@ d3.csv("group.csv", function(error, data) {
     guideline.attr('stroke-width', this.checked ? 1 : 0);
     curtain.attr("opacity", this.checked ? 0.75 : 1);
   })
+  
 
 });
+
+
 
 // Parse dates and numbers. We assume values are sorted by date.
 function type(d) {
