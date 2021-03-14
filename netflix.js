@@ -7,17 +7,20 @@ $(document).ready(function(){
 
 		netflix_map(data);
         var barchart = newdata_barchart(data);
+		// var total_tv_shows = newTotalShows(data);
 
 	  	function update_othercharts(country){
 	  		global_country = country;
 	  		var temp = data.filter(a => (a.country == global_country));
 	  		//temp =  temp.filter(a => $.inArray(a.iyear, _.range(year1,year2+1)) > -1);
             barchart.updatebc(temp);
+			// total_tv_shows.updatets(temp);
 		}
 
 		function reset_all_charts(){
 			global_country = "global";
             barchart.updatebc(data);
+			// total_tv_shows.updatets(data);
 		}
 
 		function netflix_map(data){
@@ -186,36 +189,36 @@ $(document).ready(function(){
 			  	netflix_map.transition()
 			  	.duration(750)
 			      	.call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
-			      }
+			}
 
-			      function zoomed() {
-			      	transformation = d3.event.transform;
-			      	g.attr("transform", d3.event.transform);
-			      	netflix_map.selectAll("circle").attr("transform", d3.event.transform);
-			      }
+			function zoomed() {
+				transformation = d3.event.transform;
+				g.attr("transform", d3.event.transform);
+				netflix_map.selectAll("circle").attr("transform", d3.event.transform);
+			}
 
-			      function stopped() {
-			      	if (d3.event.defaultPrevented) d3.event.stopPropagation();
-			      }
+			function stopped() {
+				if (d3.event.defaultPrevented) d3.event.stopPropagation();
+			}
 
-			      function updateTooltip(map_data){
-			      	netflix_map.selectAll("path")
-			      	.on("mouseover", function(d) {
-			      		d3.select(this)
-			      		.style("fill-opacity", 1);
-			      		cp_div.transition().duration(300)
-			      		.style("opacity", 1);
-			      		cp_div.html(`<span style="font-size:20px;font-weight:bold">Country: ${d.properties.name}<br></span><span style="font-size:20px;">Number of shows: ${map_data[d.properties.name]}</span>`).style("visibility", "visible")
-			      		.style("left", (d3.event.pageX) + "px")
-			      		.style("top", (d3.event.pageY -30) + "px");
-			      	})
-			      	.on("mouseout", function() {
-			      		d3.select(this)
-			      		.style("fill-opacity", 0.7);
-			      		cp_div.style("visibility", "none").transition().duration(300)
-			      		.style("opacity", 0);
-			      	});
-			      }
+			function updateTooltip(map_data){
+				netflix_map.selectAll("path")
+				.on("mouseover", function(d) {
+					d3.select(this)
+					.style("fill-opacity", 1);
+					cp_div.transition().duration(300)
+					.style("opacity", 1);
+					cp_div.html(`<span style="font-size:20px;font-weight:bold">Country: ${d.properties.name}<br></span><span style="font-size:20px;">Number of shows: ${map_data[d.properties.name]}</span>`).style("visibility", "visible")
+					.style("left", (d3.event.pageX) + "px")
+					.style("top", (d3.event.pageY -30) + "px");
+				})
+				.on("mouseout", function() {
+					d3.select(this)
+					.style("fill-opacity", 0.7);
+					cp_div.style("visibility", "none").transition().duration(300)
+					.style("opacity", 0);
+				});
+			}
 
 			function updateMapIntensity(map_data){ // update legends together too
 
@@ -335,6 +338,8 @@ $(document).ready(function(){
 				return a - b; 
 			}
 	    }
+
+		// barchart --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	    function newdata_barchart(data){
 
@@ -460,6 +465,136 @@ $(document).ready(function(){
 		    this.updatebc = function(data){
 		    	var barchart_array = preprocess_barchart(data);
       			updateBarchart(barchart_array);
+			}  
+			return this;
+      	}
+
+		// total_tv_shows --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	    function newTotalShows(data){
+
+	    	// Create barchart SVG
+		    var margin = {top: 20, right: 20, bottom: 45, left: 60};
+
+		    var total_shows = d3.select("#total_tv_shows")
+		    .append("svg")
+		    .attr("class", "total_shows")
+		    .attr("width", "100%")
+		    .attr("height", "100%")
+		    .append("g")
+		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+		    var bc_width = $(".total_shows").width() - margin.left - margin.right,
+		    bc_height = $(".total_shows").height() - margin.top - margin.bottom;
+
+	    	var preprocessed_data = preprocess_totalshows(data);
+
+	        // text label for the x axis title
+	        total_shows.append("g")
+	        .attr("class", "bc_xaxis")
+	        .attr("transform", "translate(" + (bc_width/2 - 20) + " ," + (bc_height + margin.top + 10) + ")")
+	        .append("text")
+	        .text("Duration");
+
+      		updateTotalShows(preprocessed_data);
+
+      		function preprocess_totalshows(data){
+
+      			var totalshows_array = [];
+	  			data.forEach(function(d) {
+	  				if(d.type == "TV Show"){
+	  					temp_dict = {}
+	  					temp_dict["duration"] = d.duration;
+	  					temp_dict["count"] = +d.count;
+	  					// totalshows_array.push(temp_dict);
+	  				}
+	  				else{
+	  					temp_dict2 = {}
+	  					temp_dict2["duration"] = d.duration;
+	  					temp_dict2["count"] = +d.count;
+	  					totalshows_array.push(temp_dict2);
+	  				}
+	  			});
+
+	      		var groups = _(totalshows_array).groupBy('duration');
+
+	      		var totalshows_array = _(groups).map(function(g, key) {
+	      			return { duration: key, 
+	      				count: _(g).reduce(function(m,x) { return m + x.count; }, 0) };
+	      			});
+
+	      		return totalshows_array;
+      		}
+
+      		function updateTotalShows(totalshows_array){
+
+		      	var x = d3.scaleBand().range([0, bc_width]).padding(0.1);
+		      	y = d3.scaleLinear().range([bc_height, 15]);
+
+	      		// make new chart
+	        	x.domain(totalshows_array.map(function(d){ return d.duration; })); 
+	        	y.domain(d3.extent(totalshows_array, function(d){ return d.count; })).nice();
+
+	        	total_shows.selectAll(".axis.axis--x").remove();
+
+	        	total_shows.append("g")
+	        	.attr("class", "axis axis--x")
+	        	.attr("transform", "translate(0," + bc_height + ")")
+	            .call(d3.axisBottom(x).tickValues(x.domain().filter(function(d,i){ return !(i%5)}))); 
+	            total_shows.selectAll(".axis.axis--y").remove();
+
+	            // remove all info window
+	            total_shows.selectAll(".infowin2").remove();
+
+	            // text label for the selected barchart text 1
+		        total_shows.append("g")
+		        .attr("class", "infowin2")
+		        .attr("transform", "translate(100, 25)")
+		        .append("text")
+		        .attr("id", "text_1a");
+
+		        // text label for the selected barchart text 2
+		        total_shows.append("g")
+		        .attr("class", "infowin2")
+		        .attr("transform", "translate(100, 45)")
+		        .append("text")
+		        .attr("id","text_2a");
+
+	            total_shows.append("g")
+	            .attr("class", "axis axis--y")
+	            .call(d3.axisLeft(y).ticks(10))
+	            .append("text")
+	            .attr("transform", "translate(60,0)")
+	            .attr("y", 6)
+	            .attr("dy", "0")
+	            .attr("text-anchor", "end")
+	            .text("Number of Shows");
+
+	            total_shows.selectAll(".bar").remove();
+
+	            total_shows.selectAll(".bar")
+	            .data(totalshows_array)
+	            .enter().append("rect")
+	            .attr("class", "bar")
+	            .attr("x", function(d) { return x(d.duration); })
+	            .attr("y", bc_height)  
+	        	.attr("width", x.bandwidth()) 
+	        	.attr("height", 0)
+	        	.on("mouseover", function(d){
+	        		d3.select("#text_1a")
+	        		.html("Duration:  " + d.duration);
+	        		d3.select("#text_2a")
+	        		.html("No. of shows: " + d.count);
+	        	})
+	        	.transition().delay(250).duration(500)
+	            .attr("y", function(d) { return y(d.count); }) 
+	            .attr("height", function(d) { return bc_height - y(d.count); }) 
+	            .style("opacity", 1);
+		    }
+
+		    this.updatets = function(data){
+		    	var totalshows_array = preprocess_totalshows(data);
+      			updateTotalShows(totalshows_array);
 			}  
 			return this;
       	}
