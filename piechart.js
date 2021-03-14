@@ -28,7 +28,7 @@ $(document).ready(function(){
             // Create pie chart SVG
             var width = 250
             height = 250
-            margin = {top: 200, right: 40, bottom: 40, left: 230};
+            margin = {top: 200, right: 40, bottom: 40, left: 195};
 
             // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
             var radius = Math.min(width, height) / 2 + 10
