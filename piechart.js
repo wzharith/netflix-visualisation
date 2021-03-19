@@ -108,11 +108,22 @@ $(document).ready(function(){
                 var u = svg.selectAll("path")
                 .data(data_ready)
 
+                var tooltip = d3.select("body").append("div").attr("id","tooltip").style("font-size","20px"); 
                 // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
                 u
                 .enter()
                 .append('path')
                 .merge(u)
+                .on("mousemove", function(d){
+                    tooltip
+                    .style("visibility", "visible")
+                    .html((d.data.value.count) + " shows")
+                    .style("top", (d3.event.pageY-60)+"px")
+                    .style("left",d3.event.pageX+10+"px");
+                })
+                .on("mouseout", function (d) { 
+                    d3.selectAll("#tooltip").style("visibility", "hidden");
+                })
                 .transition()
                 .duration(1000)
                 .attr('d', d3.arc()
