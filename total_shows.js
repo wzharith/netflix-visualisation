@@ -121,20 +121,15 @@ $(document).ready(function(){
 
                 total_shows.selectAll(".bar").remove();
 
+
                 total_shows.selectAll(".bar")
                 .data(totalshows_array)
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", function(d) { return x(d.duration_bin); })
-                .attr("y", bc_height)  
+                .attr("y", bc_height)
                 .attr("width", x.bandwidth()) 
                 .attr("height", 0)
-                .on("mouseover", function(d){
-                    d3.select("#text_1a")
-                    .html("Duration:  " + d.duration_bin);
-                    d3.select("#text_2a")
-                    .html("No. of shows: " + d.count);
-                })
                 .transition().delay(250).duration(500)
                 .attr("y", function(d) { return y(d.count); }) 
                 .attr("height", function(d) { return bc_height - y(d.count); }) 
@@ -180,6 +175,8 @@ $(document).ready(function(){
             var margin = {top: 30, right: 30, bottom: 70, left: 60},
             width = 460 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
+
+            var tooltip = d3.select("body").append("div").attr("id","tooltip").style("font-size","20px"); 
 
             // append the svg object to the body of the page
             var svg = d3.select("#total_tv_shows")
@@ -227,6 +224,19 @@ $(document).ready(function(){
                 .enter()
                 .append("rect") // Add a new rect for each new elements
                 .merge(u) // get the already existing elements as well
+                .on("mousemove", function(d){
+                    console.log(d.counts)
+                    d3.select(this).style("fill", "#E74C3C");
+                    tooltip
+                    .style("visibility", "visible")
+                    .html("Duration: " + (d.duration) + "<br>" + "No. of shows: " + (d.counts))
+                    .style("top", (d3.event.pageY-60)+"px")
+                    .style("left",d3.event.pageX+10+"px");
+                })
+                .on("mouseout", function (d) { 
+                    d3.select(this).style("fill", "firebrick");
+                    d3.selectAll("#tooltip").style("visibility", "hidden");
+                })
                 .transition() // and apply changes to all of them
                 .duration(1000)
                     .attr("x", function(d) { return x(d.duration); })
